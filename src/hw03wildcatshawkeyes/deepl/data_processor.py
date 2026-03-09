@@ -96,6 +96,9 @@ class DataProcessor:
         output_path = self.output_folder / "Final.csv"
         combined.write_csv(output_path)
         print(f"Saved final csv to {output_path}")
+        df = pl.read_csv("Final.csv")
+        print(df.filter(pl.col("status") == 1)["speed"].describe())
+        print(df.filter(pl.col("status") == 0)["speed"].describe())
 
         return output_path
 
