@@ -40,19 +40,19 @@ class ConvAttention(nn.Module):
         super(ConvAttention, self).__init__()
 
         # Define the layers of the network with weights and biases
-        self.conv1 = nn.Conv1d(1, 16, 3, padding=1)
+        self.conv1 = nn.Conv1d(1, 8, 3, padding=1)
         self.relu = nn.ReLU()
-        self.bn1 = nn.BatchNorm1d(16)
+        self.bn1 = nn.BatchNorm1d(8)
 
-        self.conv2 = nn.Conv1d(16, 32, 3, padding=1)
-        self.bn2 = nn.BatchNorm1d(32)
+        self.conv2 = nn.Conv1d(8, 16, 3, padding=1)
+        self.bn2 = nn.BatchNorm1d(16)
         self.conv3 = nn.Conv1d(32, 32, 3, padding=1)
         self.bn3 = nn.BatchNorm1d(32)
-        self.fc1 = nn.Linear(32, 1)
+        self.fc1 = nn.Linear(16, 1)
         self.soft = nn.Softmax(dim=1)
 
         self.drop = nn.Dropout(p=0.3)
-        self.fc2 = nn.Linear(32, 1)
+        self.fc2 = nn.Linear(16, 1)
         self.sig = nn.Sigmoid()
 
     def forward(self, x):
@@ -66,10 +66,10 @@ class ConvAttention(nn.Module):
         x = self.bn2(x)
         x = self.relu(x)
 
-        x = self.conv3(x)
+        #x = self.conv3(x)
         # skip connection would be added here
-        x = self.bn3(x)
-        x = self.relu(x)
+        #x = self.bn3(x)
+        #x = self.relu(x)
 
         z = torch.transpose(x, 1, 2)
         x = self.fc1(z)
