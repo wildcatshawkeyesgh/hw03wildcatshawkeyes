@@ -9,7 +9,7 @@ from datetime import datetime
 import os
 
 
-file_location = ""
+file_location = "/data/CPE_487-587/ACCDataset"
 device = "cpu"
 if torch.cuda.is_available():
     device = "cuda"
@@ -23,7 +23,7 @@ epoch = 200
 patience = 7
 batch_size = 1024
 
-processor = DataProcessor(input_folder=file_location, output_folder=".")
+processor = DataProcessor(input_folder=file_location, output_folder="/data_1")
 processor.process_all()
 
 data = DataPrep(data_path="./Final.csv", batch_size=batch_size)
