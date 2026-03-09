@@ -1,4 +1,1 @@
-
-
-from .“deepl import *
-
+from .deepl import *
