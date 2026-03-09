@@ -98,7 +98,7 @@ class ClassTrainer:
                 self.optimizer.step()
 
                 epoch_loss += loss.item()
-                predicted_classes = torch.argmax(predictions, dim=1)
+                predicted_classes = (predictions > 0.5).long()
                 correct += (predicted_classes == batch_labels).sum().item()
                 total += batch_labels.size(0)
 
