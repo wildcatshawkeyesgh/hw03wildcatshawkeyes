@@ -57,6 +57,7 @@ class ConvAttention(nn.Module):
 
     def forward(self, x):
         # Define the forward pass logic, applying functions
+        x = x.unsqueeze(1)
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
