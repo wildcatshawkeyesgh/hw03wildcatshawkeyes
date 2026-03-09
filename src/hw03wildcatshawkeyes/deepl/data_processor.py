@@ -80,7 +80,9 @@ class DataProcessor:
     def process_all(self):
 
         pairs = self.find_matching_files()
-
+        print(f"Looking in: {self.input_folder}")
+        print(f"Found pairs: {pairs}")
+        
         all_dfs = []
 
         for speed_file, status_file in pairs:
