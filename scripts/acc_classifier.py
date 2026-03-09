@@ -34,7 +34,7 @@ data.dataload()
 
 model = deepl.ConvAttention()
 
-loss = DiceLoss(mode="binary")
+loss = nn.BCELoss()
 #loss = TverskyLoss(sigmoid=False, alpha=0.3, beta=0.7)
 optimizer = optim.Adam(model.parameters(), lr=eta)
 scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epoch)
