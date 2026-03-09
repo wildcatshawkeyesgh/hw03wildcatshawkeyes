@@ -50,7 +50,8 @@ class ConvAttention(nn.Module):
         x = x.mean(dim=1)
         x = self.fc(x)
         x = self.sig(x)
-        return x
+        x = x.squeeze(1)
+    return x
     
 class ClassTrainer:
     def __init__(
