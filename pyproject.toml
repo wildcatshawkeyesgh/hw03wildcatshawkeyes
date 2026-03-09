@@ -10,6 +10,7 @@ requires-python = ">=3.12"
 dependencies = [
     "matplotlib>=3.10.8",
     "numpy>=2.4.2",
+    "segmentation-models-pytorch>=0.5.0",
     "torch>=2.10.0",
 ]
 
