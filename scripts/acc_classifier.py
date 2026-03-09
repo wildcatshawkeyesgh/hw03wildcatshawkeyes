@@ -10,7 +10,7 @@ from datetime import datetime
 import os
 
 
-file_location = "/data/CPE_487-587/ACCDataset"
+file_location = "/data/CPE_487-587/ACCDataset/"
 device = "cpu"
 if torch.cuda.is_available():
     device = "cuda"
