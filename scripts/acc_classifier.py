@@ -24,11 +24,7 @@ epoch = 200
 patience = 7
 batch_size = 1024
 
-<<<<<<< HEAD
 processor = deepl.DataProcessor(input_folder=file_location, output_folder=".")
-=======
-processor = DataProcessor(input_folder=file_location, output_folder="/data_1")
->>>>>>> 2af752cbd8c893c58785a213964b57f4563109a1
 processor.process_all()
 
 data = deepl.DataPrep(data_path="./Final.csv", batch_size=batch_size)
