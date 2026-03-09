@@ -19,10 +19,10 @@ else:
 print(device)
 
 
-eta = 0.1
+eta = 0.01
 epoch = 200
 patience = 7
-batch_size = 1024
+batch_size = 128
 
 processor = deepl.DataProcessor(input_folder=file_location, output_folder=".")
 processor.process_all()
