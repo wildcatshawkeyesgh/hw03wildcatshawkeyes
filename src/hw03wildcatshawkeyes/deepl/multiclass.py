@@ -38,15 +38,21 @@ class ConvAttention(nn.Module):
     def __init__(self):
 
         super(ConvAttention, self).__init__()
-
-        # Define the layers of the network with weights and biases
+        
         self.conv1 = nn.Conv1d(1, 8, 3, padding=1)
-        self.relu = nn.ReLU()
         self.bn1 = nn.BatchNorm1d(8)
-        self.conv2 = nn.Conv1d(8, 8, 3, padding=1)
-        self.bn2 = nn.BatchNorm1d(8)
+        self.conv2 = nn.Conv1d(8, 16, 3, padding=1)
+        self.bn2 = nn.BatchNorm1d(16)
+        self.fc2 = nn.Linear(16, 1)
+        
+        # Define the layers of the network with weights and biases
+        
+        self.relu = nn.ReLU()
+        
+        
+        
         self.fc1 = nn.Linear(8, 1)
-        self.fc2 = nn.Linear(8, 1)
+        
         self.bn3 = nn.BatchNorm1d(32)
         
         self.soft = nn.Softmax(dim=1)
@@ -56,36 +62,22 @@ class ConvAttention(nn.Module):
         self.sig = nn.Sigmoid()
 
     def forward(self, x):
-        # Define the forward pass logic, applying functions
         x = x.unsqueeze(1)
-        
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
-
-        residual = x
+    
         x = self.conv2(x)
         x = self.bn2(x)
-        x = x + residual
         x = self.relu(x)
-
-        #x = self.conv3(x)
-        # skip connection would be added here
-        #x = self.bn3(x)
-        #x = self.relu(x)
-
-        z = torch.transpose(x, 1, 2)
-        x = self.fc1(z)
-        x = self.soft(x)
-        x = torch.sum(x * z, dim=1)
-        #x = self.drop(x)
-
+    
+        x = x.mean(dim=2)
+    
         x = self.fc2(x)
         x = self.sig(x)
-
+        
         return x
-
-
+    
 class ClassTrainer:
     def __init__(
         self,
