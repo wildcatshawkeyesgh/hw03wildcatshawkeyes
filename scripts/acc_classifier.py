@@ -1,4 +1,5 @@
-from hw03wildcatshawkeyes import DataProcessor, DataPrep, ClassTrainer, ConvAttention
+from hw03wildcatshawkeyes import deepl
+
 from segmentation_models_pytorch.losses import DiceLoss
 
 import polars as pl
@@ -23,20 +24,20 @@ epoch = 200
 patience = 7
 batch_size = 1024
 
-processor = DataProcessor(input_folder=file_location, output_folder=".")
+processor = deepl.DataProcessor(input_folder=file_location, output_folder=".")
 processor.process_all()
 
-data = DataPrep(data_path="./Final.csv", batch_size=batch_size)
+data = deepl.DataPrep(data_path="./Final.csv", batch_size=batch_size)
 data.dataload()
 
 
-model = ConvAttention()
+model = deepl.ConvAttention()
 
 loss = DiceLoss(mode="binary")
 optimizer = optim.Adam(model.parameters(), lr=eta)
 scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epoch)
 
-trainer = ClassTrainer(
+trainer = deepl.ClassTrainer(
     train_loader=data.train_loader,
     test_loader=data.test_loader,
     eta=eta,
