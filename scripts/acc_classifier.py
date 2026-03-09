@@ -7,7 +7,7 @@ import polars as pl
 import torch
 import torch.optim as optim
 from datetime import datetime
-
+import torch.nn as nn
 import os
 
 
