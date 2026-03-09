@@ -51,7 +51,7 @@ class ConvAttention(nn.Module):
         x = self.fc(x)
         x = self.sig(x)
         x = x.squeeze(1)
-    return x
+        return x
     
 class ClassTrainer:
     def __init__(
