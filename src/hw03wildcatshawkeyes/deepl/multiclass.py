@@ -37,7 +37,7 @@ class SimpleNN(nn.Module):
 class ConvAttention(nn.Module):
     def __init__(self):
 
-        super(SimpleNN, self).__init__()
+        super(ConvAttention, self).__init__()
 
         # Define the layers of the network with weights and biases
         self.conv1 = nn.Conv1d(1, 16, 3, padding=1)
