@@ -78,7 +78,7 @@ class DataProcessor:
         return final_df
 
     def process_all(self):
-
+        print(list(self.input_folder.glob("*")))
         pairs = self.find_matching_files()
         print(f"Looking in: {self.input_folder}")
         print(f"Found pairs: {pairs}")
