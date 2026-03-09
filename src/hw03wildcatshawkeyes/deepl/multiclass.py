@@ -75,7 +75,7 @@ class ConvAttention(nn.Module):
         x = self.fc1(z)
         x = self.soft(x)
         x = torch.sum(x * z, dim=1)
-        x = self.drop(x)
+        #x = self.drop(x)
 
         x = self.fc2(x)
         x = self.sig(x)
