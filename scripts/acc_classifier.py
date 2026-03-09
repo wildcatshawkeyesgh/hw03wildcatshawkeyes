@@ -19,7 +19,7 @@ else:
 print(device)
 
 
-eta = 0.01
+eta = 0.1
 epoch = 200
 patience = 7
 batch_size = 1024
