@@ -9,8 +9,8 @@ __all__ = ["DataProcessor", "DataPrep"]
 
 
 class DataProcessor:
-    wheel_speed_file = "_decoded_wheel_speed_fl.csv"
-    status_file = "_acc_status.csv"
+    wheel_speed_file = "_CAN_Messages_decoded_wheel_speed_fl.csv"
+    status_file = "_CAN_Messages_decoded_acc_status.csv"
     kmh_ms_conversion = 1 / 3.6
     num_lags = 9
 
