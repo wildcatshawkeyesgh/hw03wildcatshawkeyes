@@ -50,7 +50,7 @@ class ConvAttention(nn.Module):
         x = x.mean(dim=1)
         x = self.fc(x)
         x = self.sig(x)
-        x = x.squeeze(1)
+        
         return x
     
 class ClassTrainer:
@@ -92,7 +92,7 @@ class ClassTrainer:
             for batch_features, batch_labels in self.train_loader:
                 self.optimizer.zero_grad()
                 predictions = self.model.forward(batch_features)
-                loss = self.loss(predictions, batch_labels)
+                loss = self.loss(predictions, batch_labels.unsqueeze(1).float())
                 loss.backward()
                 self.optimizer.step()
 
