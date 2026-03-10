@@ -5,7 +5,7 @@ import torch
 from torch.utils.data import DataLoader as TorchDataLoader, TensorDataset
 
 
-__all__ = ["DataProcessor", "DataPrep","get_best_gpu"]
+__all__ = ["DataProcessor", "DataPrep", "get_best_gpu"]
 
 
 class DataProcessor:
@@ -78,10 +78,9 @@ class DataProcessor:
         return final_df
 
     def process_all(self):
-        
+
         pairs = self.find_matching_files()
-        
-        
+
         all_dfs = []
 
         for speed_file, status_file in pairs:
@@ -136,26 +135,40 @@ class DataPrep:
         train_dataset = TensorDataset(X_train, Y_train)
         test_dataset = TensorDataset(X_test, Y_test)
 
-        self.train_loader = TorchDataLoader(train_dataset, batch_size=self.batch_size, shuffle=True,
-            num_workers=4, pin_memory=True)
+        self.train_loader = TorchDataLoader(
+            train_dataset,
+            batch_size=self.batch_size,
+            shuffle=True,
+            num_workers=4,
+            pin_memory=True,
+        )
         self.test_loader = TorchDataLoader(
             test_dataset, batch_size=self.batch_size, shuffle=False
         )
+
+
 import subprocess
 import torch
+
+
 def get_best_gpu(strategy="utilization"):
-    if strategy == "memory": 
+    if strategy == "memory":
         free_mem = []
         for i in range(torch.cuda.device_count()):
-            props = torch. cuda.mem_get_info(1) # (free, total)
-            free_mem. append (props [o])
+            props = torch.cuda.mem_get_info(1)  # (free, total)
+            free_mem.append(props[o])
             return free_mem.index(max(free_mem))
-    
+
     elif strategy == "utilization":
         result = subprocess.run(
-        ["nvidia-smi", "--query-gpu=utilization.gpu", "--format=csv, noheader, nounits"],
-        capture_output=True, text=True)
-    
-        utilizations = [int(x.strip)) for x in result.stdout.strip) split("\n")]
-        return utilizations.index(min(utilizations))
+            [
+                "nvidia-smi",
+                "--query-gpu=utilization.gpu",
+                "--format=csv, noheader, nounits",
+            ],
+            capture_output=True,
+            text=True,
+        )
 
+        utilizations = [int(x.strip()) for x in result.stdout.strip().split("\n")]
+        return utilizations.index(min(utilizations))
