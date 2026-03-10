@@ -120,7 +120,7 @@ class ClassTrainer:
                 self.optimizer.step()
 
                 epoch_loss += loss.item()
-                predicted_classes = (predictions > 0.5).long()
+                predicted_classes = (predictions.squeeze() > 0.0).long()
                 correct += (predicted_classes == batch_labels).sum().item()
                 total += batch_labels.size(0)
 
