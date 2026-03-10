@@ -22,7 +22,7 @@ print(device)
 device_id = deepl.get_best_gpu(strategy="utilization")
 device = torch.device(f"cuda:{device_id}")
 print(f"Selected GPU: {device_id}")
-eta = 0.03
+eta = 0.0003
 epoch = 200
 patience = 7
 batch_size = 1024

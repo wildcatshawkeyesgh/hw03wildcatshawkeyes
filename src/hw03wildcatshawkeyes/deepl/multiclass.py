@@ -114,6 +114,9 @@ class ClassTrainer:
             for batch_features, batch_labels in self.train_loader:
                 self.optimizer.zero_grad()
                 predictions = self.model.forward(batch_features)
+                if i == 0 and total == 0:
+                    print(predictions[:10].squeeze())
+                    print(batch_labels[:10])
 
                 loss = self.loss(predictions, batch_labels.unsqueeze(1).float())
                 loss.backward()
