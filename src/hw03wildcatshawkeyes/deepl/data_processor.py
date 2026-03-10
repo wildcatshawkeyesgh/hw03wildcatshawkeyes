@@ -164,7 +164,7 @@ def get_best_gpu(strategy="utilization"):
             [
                 "nvidia-smi",
                 "--query-gpu=utilization.gpu",
-                "--format=csv, noheader, nounits",
+                "--format=csv,noheader,nounits",
             ],
             capture_output=True,
             text=True,
