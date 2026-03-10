@@ -13,7 +13,7 @@ from sklearn.metrics import (
 )
 
 
-__all__ = ["SimpleNN", "ClassTrainer", "ConvAttention"]
+__all__ = ["SimpleNN", "ClassTrainer", "OptimusPrime"]
 
 
 class SimpleNN(nn.Module):

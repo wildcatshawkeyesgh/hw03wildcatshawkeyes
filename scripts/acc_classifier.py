@@ -32,10 +32,11 @@ data = deepl.DataPrep(data_path="./Final.csv", batch_size=batch_size)
 data.dataload()
 
 
-model = deepl.ConvAttention()
+model = deepl.OptimusPrime()
 
-loss = nn.BCELoss()
-#loss = TverskyLoss(sigmoid=False, alpha=0.3, beta=0.7)
+# loss = nn.BCELoss()
+loss = DiceLoss(mode="binary", from_logits=True)
+# loss = TverskyLoss(sigmoid=False, alpha=0.3, beta=0.7)
 optimizer = optim.Adam(model.parameters(), lr=eta)
 scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epoch)
 
