@@ -39,7 +39,7 @@ model = deepl.OptimusPrime()
 # loss = nn.BCELoss()
 loss = DiceLoss(mode="binary", from_logits=True)
 # loss = TverskyLoss(sigmoid=False, alpha=0.3, beta=0.7)
-optimizer = optim.Adam(model.parameters(), lr=eta)
+optimizer = optim.AdamW(model.parameters(), lr=eta, weight_decay=0.0001)
 scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epoch)
 
 trainer = deepl.ClassTrainer(
