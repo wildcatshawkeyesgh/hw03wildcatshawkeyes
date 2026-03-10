@@ -34,25 +34,46 @@ class SimpleNN(nn.Module):
         return x
 
 
-class ConvAttention(nn.Module):
-    def __init__(self, input_size=10, d_model=32, nhead=4, num_layers=1):
+class OptimusPrime(nn.Module):
+    def __init__(self):
         super().__init__()
-        self.embedding = nn.Linear(input_size, d_model)
-        encoder_layer = nn.TransformerEncoderLayer(d_model=d_model, nhead=nhead, batch_first=True)
-        self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
-        self.fc = nn.Linear(d_model, 1)
-        self.sig = nn.Sigmoid()
+        self.embedding = nn.Linear(1, 64)
+        self.register_buffer("pe", self._build_tape())
+        self.pe_dropout = nn.Dropout(0.15)
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=64,
+            nhead=4,
+            dim_feedforward=128,
+            dropout=0.15,
+            activation="gelu",
+            batch_first=True,
+            norm_first=True,
+        )
+        self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=2)
+        self.norm = nn.LayerNorm(64)
+        self.fc = nn.Linear(64, 1)
+
+    def _build_tape(self):
+        pe = torch.zeros(10, 64)
+        position = torch.arange(0, 10, dtype=torch.float32).unsqueeze(1)
+        div_term = torch.exp(
+            torch.arange(0, 64, 2, dtype=torch.float32) * (-math.log(10000.0) / 64)
+        )
+        pe[:, 0::2] = torch.sin(position * div_term * (64 / 10))
+        pe[:, 1::2] = torch.cos(position * div_term * (64 / 10))
+        return pe.unsqueeze(0)
 
     def forward(self, x):
-        x = x.unsqueeze(1)
+        x = x.unsqueeze(-1)
         x = self.embedding(x)
+        x = self.pe_dropout(x + self.pe[:, : x.size(1), :])
         x = self.transformer(x)
+        x = self.norm(x)
         x = x.mean(dim=1)
         x = self.fc(x)
-        x = self.sig(x)
-        
         return x
-    
+
+
 class ClassTrainer:
     def __init__(
         self,
@@ -92,7 +113,7 @@ class ClassTrainer:
             for batch_features, batch_labels in self.train_loader:
                 self.optimizer.zero_grad()
                 predictions = self.model.forward(batch_features)
-                
+
                 loss = self.loss(predictions, batch_labels.unsqueeze(1).float())
                 loss.backward()
                 self.optimizer.step()
