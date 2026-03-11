@@ -38,41 +38,91 @@ class SimpleNN(nn.Module):
 class OptimusPrime(nn.Module):
     def __init__(self):
         super().__init__()
-        self.embedding = nn.Linear(1, 64)
-        self.register_buffer("pe", self._build_tape())
-        self.pe_dropout = nn.Dropout(0.15)
-        encoder_layer = nn.TransformerEncoderLayer(
-            d_model=64,
-            nhead=4,
-            dim_feedforward=128,
-            dropout=0.15,
-            activation="gelu",
-            batch_first=True,
-            norm_first=True,
-        )
-        self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=2)
-        self.norm = nn.LayerNorm(64)
-        self.fc = nn.Linear(64, 1)
 
-    def _build_tape(self):
-        pe = torch.zeros(10, 64)
-        position = torch.arange(0, 10, dtype=torch.float32).unsqueeze(1)
-        div_term = torch.exp(
-            torch.arange(0, 64, 2, dtype=torch.float32) * (-math.log(10000.0) / 64)
+        self.feature_embedding_0 = nn.Linear(1, 32)
+        self.feature_embedding_1 = nn.Linear(1, 32)
+        self.feature_embedding_2 = nn.Linear(1, 32)
+        self.feature_embedding_3 = nn.Linear(1, 32)
+        self.feature_embedding_4 = nn.Linear(1, 32)
+        self.feature_embedding_5 = nn.Linear(1, 32)
+        self.feature_embedding_6 = nn.Linear(1, 32)
+        self.feature_embedding_7 = nn.Linear(1, 32)
+        self.feature_embedding_8 = nn.Linear(1, 32)
+        self.feature_embedding_9 = nn.Linear(1, 32)
+
+        self.cls_token = nn.Parameter(torch.randn(1, 1, 32))
+
+        self.attention1 = nn.MultiheadAttention(
+            embed_dim=32, num_heads=4, batch_first=True
         )
-        pe[:, 0::2] = torch.sin(position * div_term * (64 / 10))
-        pe[:, 1::2] = torch.cos(position * div_term * (64 / 10))
-        return pe.unsqueeze(0)
+        self.norm1a = nn.LayerNorm(32)
+        self.ffn1_linear1 = nn.Linear(32, 128)
+        self.ffn1_gelu = nn.GELU()
+        self.ffn1_linear2 = nn.Linear(128, 32)
+        self.norm1b = nn.LayerNorm(32)
+
+        self.attention2 = nn.MultiheadAttention(
+            embed_dim=32, num_heads=4, batch_first=True
+        )
+        self.norm2a = nn.LayerNorm(32)
+        self.ffn2_linear1 = nn.Linear(32, 128)
+        self.ffn2_gelu = nn.GELU()
+        self.ffn2_linear2 = nn.Linear(128, 32)
+        self.norm2b = nn.LayerNorm(32)
+
+        self.classifier = nn.Linear(32, 1)
 
     def forward(self, x):
-        x = x.unsqueeze(-1)
-        x = self.embedding(x)
-        x = self.pe_dropout(x + self.pe[:, : x.size(1), :])
-        x = self.transformer(x)
-        x = self.norm(x)
-        x = x.mean(dim=1)
-        x = self.fc(x)
-        return x
+        token_0 = self.feature_embedding_0(x[:, 0:1])
+        token_1 = self.feature_embedding_1(x[:, 1:2])
+        token_2 = self.feature_embedding_2(x[:, 2:3])
+        token_3 = self.feature_embedding_3(x[:, 3:4])
+        token_4 = self.feature_embedding_4(x[:, 4:5])
+        token_5 = self.feature_embedding_5(x[:, 5:6])
+        token_6 = self.feature_embedding_6(x[:, 6:7])
+        token_7 = self.feature_embedding_7(x[:, 7:8])
+        token_8 = self.feature_embedding_8(x[:, 8:9])
+        token_9 = self.feature_embedding_9(x[:, 9:10])
+
+        x = torch.stack(
+            [
+                token_0,
+                token_1,
+                token_2,
+                token_3,
+                token_4,
+                token_5,
+                token_6,
+                token_7,
+                token_8,
+                token_9,
+            ],
+            dim=1,
+        )
+
+        cls = self.cls_token.expand(x.size(0), -1, -1)
+        x = torch.cat([cls, x], dim=1)
+
+        attn_out1, _ = self.attention1(x, x, x)
+        x = x + attn_out1
+        x = self.norm1a(x)
+        ffn1_out = self.ffn1_linear1(x)
+        ffn1_out = self.ffn1_gelu(ffn1_out)
+        ffn1_out = self.ffn1_linear2(ffn1_out)
+        x = x + ffn1_out
+        x = self.norm1b(x)
+
+        attn_out2, _ = self.attention2(x, x, x)
+        x = x + attn_out2
+        x = self.norm2a(x)
+        ffn2_out = self.ffn2_linear1(x)
+        ffn2_out = self.ffn2_gelu(ffn2_out)
+        ffn2_out = self.ffn2_linear2(ffn2_out)
+        x = x + ffn2_out
+        x = self.norm2b(x)
+
+        cls_output = x[:, 0, :]
+        return self.classifier(cls_output)
 
 
 class ClassTrainer:
