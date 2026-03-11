@@ -22,10 +22,10 @@ print(device)
 device_id = deepl.get_best_gpu(strategy="utilization")
 device = torch.device(f"cuda:{device_id}")
 print(f"Selected GPU: {device_id}")
-eta = 0.001
+eta = 0.002
 epoch = 200
-patience = 7
-batch_size = 1024
+patience = 25
+batch_size = 4096
 
 processor = deepl.DataProcessor(input_folder=file_location, output_folder=".")
 processor.process_all()
@@ -38,11 +38,10 @@ data.dataload()
 
 model = deepl.OptimusPrime()
 
-model = deepl.OptimusPrime()
 
 # loss = nn.BCELoss()
 # loss = DiceLoss(mode="binary", from_logits=True)
-loss = TverskyLoss(mode="binary", alpha=0.3, beta=0.7, from_logits=True)
+loss = TverskyLoss(mode="binary", alpha=0.2, beta=0.8, from_logits=True)
 optimizer = optim.AdamW(model.parameters(), lr=eta, weight_decay=0.0001)
 scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epoch)
 
