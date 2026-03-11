@@ -32,7 +32,46 @@ processor.process_all()
 
 data = deepl.DataPrep(data_path="./Final.csv", batch_size=batch_size)
 data.dataload()
+data = deepl.DataPrep(data_path="./Final.csv", batch_size=batch_size)
+data.dataload()
 
+# ============ ADD THIS SECTION ============
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, roc_auc_score, classification_report
+
+# Get the raw data before it was batched
+features, results = data.get_features_results()
+X = features.to_numpy()
+y = results.to_numpy().squeeze()
+
+# Quick split (or reuse your existing split)
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Fit logistic regression
+lr_model = LogisticRegression(max_iter=1000)
+lr_model.fit(X_train, y_train)
+
+y_pred = lr_model.predict(X_test)
+y_prob = lr_model.predict_proba(X_test)[:, 1]
+
+print("\n===== LOGISTIC REGRESSION BASELINE =====")
+print(f"Baseline (majority class): {max(y_train.mean(), 1 - y_train.mean()):.3f}")
+print(f"Accuracy: {accuracy_score(y_test, y_pred):.3f}")
+print(f"ROC AUC: {roc_auc_score(y_test, y_prob):.3f}")
+print(classification_report(y_test, y_pred))
+
+print("\n===== FEATURE IMPORTANCE BY LAG =====")
+feature_names = ["speed"] + [f"speed_{i}" for i in range(1, 10)]
+for name, coef in zip(feature_names, lr_model.coef_[0]):
+    print(f"{name}: {coef:.4f}")
+print("========================================\n")
+# ============ END SECTION ============
+
+model = deepl.OptimusPrime()
 
 model = deepl.OptimusPrime()
 
