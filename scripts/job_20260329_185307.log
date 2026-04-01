@@ -1,0 +1,32 @@
+Using device: cuda
+Selected GPU: 1
+Number of classes: 1000
+Train samples: 128116
+Train batches: 1001
+Total trainable parameters: 5464040
+/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Corrupt EXIF data.  Expecting to read 2 bytes but only got 0. 
+  warnings.warn(str(msg))
+Epoch 0, Loss: 6.4441, Accuracy: 0.0112, Time: 157.60s
+/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Corrupt EXIF data.  Expecting to read 2 bytes but only got 0. 
+  warnings.warn(str(msg))
+Epoch 1, Loss: 5.8542, Accuracy: 0.0302, Time: 156.62s
+/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Corrupt EXIF data.  Expecting to read 2 bytes but only got 0. 
+  warnings.warn(str(msg))
+Epoch 2, Loss: 5.5301, Accuracy: 0.0487, Time: 156.84s
+/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Corrupt EXIF data.  Expecting to read 2 bytes but only got 0. 
+  warnings.warn(str(msg))
+Epoch 3, Loss: 5.2890, Accuracy: 0.0673, Time: 156.48s
+/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Corrupt EXIF data.  Expecting to read 2 bytes but only got 0. 
+  warnings.warn(str(msg))
+Epoch 4, Loss: 5.0831, Accuracy: 0.0859, Time: 156.61s
+/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Corrupt EXIF data.  Expecting to read 2 bytes but only got 0. 
+  warnings.warn(str(msg))
+Epoch 5, Loss: 4.9040, Accuracy: 0.1011, Time: 156.70s
+/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Corrupt EXIF data.  Expecting to read 2 bytes but only got 0. 
+  warnings.warn(str(msg))
+Epoch 6, Loss: 4.7581, Accuracy: 0.1169, Time: 156.85s
+/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Corrupt EXIF data.  Expecting to read 2 bytes but only got 0. 
+  warnings.warn(str(msg))
+Epoch 7, Loss: 4.6318, Accuracy: 0.1301, Time: 156.77s
+/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Corrupt EXIF data.  Expecting to read 2 bytes but only got 0. 
+  warnings.warn(str(msg))

@@ -2,7 +2,6 @@ from hw03wildcatshawkeyes import deepl
 
 from segmentation_models_pytorch.losses import TverskyLoss
 
-
 import polars as pl
 import torch
 import torch.optim as optim
@@ -22,28 +21,30 @@ print(device)
 device_id = deepl.get_best_gpu(strategy="utilization")
 device = torch.device(f"cuda:{device_id}")
 print(f"Selected GPU: {device_id}")
-eta = 0.0003
-epoch = 200
+eta = 0.0009
+epoch = 6
 patience = 25
 batch_size = 4096
-
-processor = deepl.DataProcessor(input_folder=file_location, output_folder=".")
+num_lags = 9
+processor = deepl.DataProcessor(input_folder=file_location, output_folder=".", num_lags = num_lags)
 processor.process_all()
 
-data = deepl.DataPrep(data_path="./Final.csv", batch_size=batch_size)
-data.dataload()
-data = deepl.DataPrep(data_path="./Final.csv", batch_size=batch_size)
+data = deepl.DataPrep(
+    data_path="./Final.csv",
+    batch_size=batch_size)
 data.dataload()
 
 
-model = deepl.OptimusPrime()
+model = deepl.OptimusPrime().to(device)
 
 
 # loss = nn.BCELoss()
 # loss = DiceLoss(mode="binary", from_logits=True)
-loss = TverskyLoss(mode="binary", alpha=0.2, beta=0.8, from_logits=True)
-optimizer = optim.AdamW(model.parameters(), lr=eta, weight_decay=0.0001)
-scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epoch)
+loss = TverskyLoss(mode="binary", alpha=0.7, beta=0.3, gamma = 2, from_logits=True)
+optimizer = optim.AdamW(model.parameters(), lr=eta, weight_decay=0.00001)
+warm = optim.lr_scheduler.LinearLR(optimizer, start_factor = 0.1, total_iters = 10)
+learn_rate = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epoch)
+scheduler = optim.lr_scheduler.SequentialLR(optimizer, [warm, learn_rate], milestones=[10])
 
 trainer = deepl.ClassTrainer(
     train_loader=data.train_loader,
@@ -59,6 +60,7 @@ trainer = deepl.ClassTrainer(
 )
 trainer.train()
 trainer.test()
+
 train_acc, train_prec, train_rec, train_f1, test_acc, test_prec, test_rec, test_f1 = (
     trainer.evaluation()
 )

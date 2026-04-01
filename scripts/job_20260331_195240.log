@@ -1,0 +1,347 @@
+Using device: cuda
+Selected GPU: 0
+Number of classes: 1000
+Train samples: 12811
+Train batches: 101
+Total trainable parameters: 5464040
+Epoch 0, Loss: 6.8874, Accuracy: 0.0025, Time: 17.49s
+Epoch 1, Loss: 6.7371, Accuracy: 0.0063, Time: 16.64s
+Epoch 2, Loss: 6.5781, Accuracy: 0.0098, Time: 16.47s
+Epoch 3, Loss: 6.4148, Accuracy: 0.0119, Time: 16.58s
+Epoch 4, Loss: 6.2829, Accuracy: 0.0142, Time: 16.48s
+Epoch 5, Loss: 6.1454, Accuracy: 0.0197, Time: 16.71s
+Epoch 6, Loss: 6.0421, Accuracy: 0.0213, Time: 16.61s
+Epoch 7, Loss: 5.9498, Accuracy: 0.0226, Time: 16.62s
+Epoch 8, Loss: 5.8600, Accuracy: 0.0276, Time: 16.65s
+W0331 19:55:41.107000 3705498 torch/onnx/_internal/exporter/_schemas.py:455] Missing annotation for parameter 'input' from (input, boxes, output_size: 'Sequence[int]', spatial_scale: 'float' = 1.0, sampling_ratio: 'int' = -1, aligned: 'bool' = False). Treating as an Input.
+W0331 19:55:41.109000 3705498 torch/onnx/_internal/exporter/_schemas.py:455] Missing annotation for parameter 'boxes' from (input, boxes, output_size: 'Sequence[int]', spatial_scale: 'float' = 1.0, sampling_ratio: 'int' = -1, aligned: 'bool' = False). Treating as an Input.
+W0331 19:55:41.109000 3705498 torch/onnx/_internal/exporter/_schemas.py:455] Missing annotation for parameter 'input' from (input, boxes, output_size: 'Sequence[int]', spatial_scale: 'float' = 1.0). Treating as an Input.
+W0331 19:55:41.110000 3705498 torch/onnx/_internal/exporter/_schemas.py:455] Missing annotation for parameter 'boxes' from (input, boxes, output_size: 'Sequence[int]', spatial_scale: 'float' = 1.0). Treating as an Input.
+E0331 19:55:48.571000 3705498 torch/export/_trace.py:1250] always_classified is unsupported.
+E0331 19:55:48.572000 3705498 torch/export/_trace.py:1250] always_classified is unsupported.
+Epoch 9, Loss: 5.7920, Accuracy: 0.0291, Time: 16.47s
+[torch.onnx] Obtain model graph for `ImageCNN([...]` with `torch.export.export(..., strict=False)`...
+[torch.onnx] Obtain model graph for `ImageCNN([...]` with `torch.export.export(..., strict=False)`... ❌
+[torch.onnx] Obtain model graph for `ImageCNN([...]` with `torch.export.export(..., strict=True)`...
+[torch.onnx] Obtain model graph for `ImageCNN([...]` with `torch.export.export(..., strict=True)`... ❌
+Traceback (most recent call last):
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/onnx/_internal/exporter/_capture_strategies.py", line 121, in __call__
+    exported_program = self._capture(model, args, kwargs, dynamic_shapes)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/onnx/_internal/exporter/_capture_strategies.py", line 219, in _capture
+    return torch.export.export(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/export/__init__.py", line 311, in export
+    raise e
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/export/__init__.py", line 277, in export
+    return _export(
+           ^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/export/_trace.py", line 1271, in wrapper
+    raise e
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/export/_trace.py", line 1237, in wrapper
+    ep = fn(*args, **kwargs)
+         ^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/export/exported_program.py", line 124, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/export/_trace.py", line 2377, in _export
+    ep = _export_for_training(
+         ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/export/_trace.py", line 1271, in wrapper
+    raise e
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/export/_trace.py", line 1237, in wrapper
+    ep = fn(*args, **kwargs)
+         ^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/export/exported_program.py", line 124, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/export/_trace.py", line 2185, in _export_for_training
+    export_artifact = export_func(
+                      ^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/export/_trace.py", line 2116, in _non_strict_export
+    aten_export_artifact = _to_aten_func(
+                           ^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/export/_trace.py", line 1904, in _export_to_aten_ir_make_fx
+    gm, graph_signature = transform(_make_fx_helper)(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/export/_trace.py", line 2034, in _aot_export_non_strict
+    gm, sig = aot_export(stack, wrapped_mod, args, kwargs=kwargs, **flags)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/export/_trace.py", line 1816, in _make_fx_helper
+    gm = make_fx(
+         ^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/experimental/proxy_tensor.py", line 2701, in wrapped
+    return make_fx_tracer.trace(f, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/experimental/proxy_tensor.py", line 2626, in trace
+    return self._trace_inner(f, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/experimental/proxy_tensor.py", line 2588, in _trace_inner
+    t = dispatch_trace(
+        ^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_compile.py", line 54, in inner
+    return disable_fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_dynamo/eval_frame.py", line 1180, in _fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/experimental/proxy_tensor.py", line 1460, in dispatch_trace
+    graph = tracer.trace(root, concrete_args)  # type: ignore[arg-type]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/experimental/proxy_tensor.py", line 2177, in trace
+    res = super().trace(root, concrete_args)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/_symbolic_trace.py", line 879, in trace
+    (self.create_arg(fn(*args)),),
+                     ^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/experimental/proxy_tensor.py", line 1526, in wrapped
+    out = f(*tensors)  # type:ignore[call-arg]
+          ^^^^^^^^^^^
+  File "<string>", line 1, in <lambda>
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/export/_trace.py", line 1703, in wrapped_fn
+    return tuple(flat_fn(*args))
+                 ^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_functorch/_aot_autograd/utils.py", line 193, in flat_fn
+    tree_out = fn(*args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_functorch/_aot_autograd/graph_capture_wrappers.py", line 1377, in functional_call
+    out = mod(*args[params_len:], **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/_symbolic_trace.py", line 853, in module_call_wrapper
+    return self.call_module(mod, forward, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/experimental/proxy_tensor.py", line 2264, in call_module
+    return Tracer.call_module(self, m, forward, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/_symbolic_trace.py", line 569, in call_module
+    ret_val = forward(*args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/_symbolic_trace.py", line 846, in forward
+    return _orig_module_call(mod, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/export/_trace.py", line 2018, in forward
+    tree_out = mod(*args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/_symbolic_trace.py", line 853, in module_call_wrapper
+    return self.call_module(mod, forward, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/experimental/proxy_tensor.py", line 2264, in call_module
+    return Tracer.call_module(self, m, forward, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/_symbolic_trace.py", line 569, in call_module
+    ret_val = forward(*args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/_symbolic_trace.py", line 846, in forward
+    return _orig_module_call(mod, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/src/hw03wildcatshawkeyes/deepl/multiclass.py", line 230, in forward
+    x = self.block1(x)
+        ^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/_symbolic_trace.py", line 853, in module_call_wrapper
+    return self.call_module(mod, forward, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/experimental/proxy_tensor.py", line 2264, in call_module
+    return Tracer.call_module(self, m, forward, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/_symbolic_trace.py", line 569, in call_module
+    ret_val = forward(*args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/_symbolic_trace.py", line 846, in forward
+    return _orig_module_call(mod, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/src/hw03wildcatshawkeyes/deepl/multiclass.py", line 204, in forward
+    x = self.batch(x)
+        ^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/_symbolic_trace.py", line 853, in module_call_wrapper
+    return self.call_module(mod, forward, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/experimental/proxy_tensor.py", line 2264, in call_module
+    return Tracer.call_module(self, m, forward, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/_symbolic_trace.py", line 569, in call_module
+    ret_val = forward(*args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/_symbolic_trace.py", line 846, in forward
+    return _orig_module_call(mod, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/nn/modules/batchnorm.py", line 194, in forward
+    return F.batch_norm(
+           ^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/nn/functional.py", line 2827, in batch_norm
+    return handle_torch_function(
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/overrides.py", line 1740, in handle_torch_function
+    result = mode.__torch_function__(public_api, types, args, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/experimental/proxy_tensor.py", line 1577, in __torch_function__
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/nn/functional.py", line 2827, in batch_norm
+    return handle_torch_function(
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/overrides.py", line 1740, in handle_torch_function
+    result = mode.__torch_function__(public_api, types, args, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/experimental/proxy_tensor.py", line 1648, in __torch_function__
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/nn/functional.py", line 2827, in batch_norm
+    return handle_torch_function(
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/overrides.py", line 1740, in handle_torch_function
+    result = mode.__torch_function__(public_api, types, args, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_export/non_strict_utils.py", line 1139, in __torch_function__
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/nn/functional.py", line 2846, in batch_norm
+    return torch.batch_norm(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_ops.py", line 940, in handler
+    return torch._library.utils.handle_dispatch_mode(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_library/utils.py", line 313, in handle_dispatch_mode
+    return curr_mode.__torch_dispatch__(op_overload, overload_types, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/utils/_stats.py", line 29, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/experimental/proxy_tensor.py", line 1703, in __torch_dispatch__
+    return proxy_call(self, func, self.pre_dispatch, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/fx/experimental/proxy_tensor.py", line 1145, in proxy_call
+    out = func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_ops.py", line 819, in __call__
+    return self._op(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_decomp/decompositions.py", line 2032, in native_batch_norm_decomposition
+    return aten._native_batch_norm_legit_no_training(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_ops.py", line 1209, in __call__
+    return self._op(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/utils/_stats.py", line 29, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_subclasses/fake_tensor.py", line 1397, in __torch_dispatch__
+    return self.dispatch(func, types, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_subclasses/fake_tensor.py", line 2155, in dispatch
+    return self._cached_dispatch_impl(func, types, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_subclasses/fake_tensor.py", line 1544, in _cached_dispatch_impl
+    output = self._dispatch_impl(func, types, args, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_subclasses/fake_tensor.py", line 2707, in _dispatch_impl
+    decomposition_table[func](*args, **kwargs)
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_decomp/decompositions.py", line 2059, in _native_batch_norm_legit_no_training
+    return aten._native_batch_norm_legit.default(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_ops.py", line 819, in __call__
+    return self._op(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/utils/_stats.py", line 29, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_subclasses/fake_tensor.py", line 1397, in __torch_dispatch__
+    return self.dispatch(func, types, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_subclasses/fake_tensor.py", line 2155, in dispatch
+    return self._cached_dispatch_impl(func, types, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_subclasses/fake_tensor.py", line 1544, in _cached_dispatch_impl
+    output = self._dispatch_impl(func, types, args, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_subclasses/fake_tensor.py", line 2707, in _dispatch_impl
+    decomposition_table[func](*args, **kwargs)
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_decomp/decompositions.py", line 2082, in _native_batch_norm_legit
+    output, save_mean, save_rstd, _, _ = native_batch_norm_helper(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_decomp/decompositions.py", line 1948, in native_batch_norm_helper
+    output = (input - mean) * invstd
+              ~~~~~~^~~~~~
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/utils/_stats.py", line 29, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_subclasses/fake_tensor.py", line 1397, in __torch_dispatch__
+    return self.dispatch(func, types, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_subclasses/fake_tensor.py", line 2155, in dispatch
+    return self._cached_dispatch_impl(func, types, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_subclasses/fake_tensor.py", line 1544, in _cached_dispatch_impl
+    output = self._dispatch_impl(func, types, args, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_subclasses/fake_tensor.py", line 2831, in _dispatch_impl
+    self.wrap_meta_outputs_with_default_device_logic(
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_subclasses/fake_tensor.py", line 2959, in wrap_meta_outputs_with_default_device_logic
+    return tree_map(wrap, r)
+           ^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/utils/_pytree.py", line 1536, in tree_map
+    return treespec.unflatten(map(func, *flat_args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/utils/_pytree.py", line 1277, in unflatten
+    leaves = list(leaves)
+             ^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_subclasses/fake_tensor.py", line 2936, in wrap
+    ) = FakeTensor._find_common_device(func, flat_args)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_subclasses/fake_tensor.py", line 992, in _find_common_device
+    merge_devices(arg)
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/_subclasses/fake_tensor.py", line 987, in merge_devices
+    raise RuntimeError(
+RuntimeError: Unhandled FakeTensor Device Propagation for aten.sub.Tensor, found two different devices cpu, cuda:0
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/pzs0001/hw03wildcatshawkeyes/scripts/imagenet_impl.py", line 173, in <module>
+    trainer.save("image_model.onnx")
+  File "/home/pzs0001/hw03wildcatshawkeyes/src/hw03wildcatshawkeyes/deepl/multiclass.py", line 107, in save
+    torch.onnx.export(self.model, dummy_input, file_name)
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/onnx/__init__.py", line 296, in export
+    return _compat.export_compat(
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/onnx/_internal/exporter/_compat.py", line 154, in export_compat
+    onnx_program = _core.export(
+                   ^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/onnx/_internal/exporter/_flags.py", line 27, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pzs0001/hw03wildcatshawkeyes/.venv/lib/python3.12/site-packages/torch/onnx/_internal/exporter/_core.py", line 1409, in export
+    raise _errors.TorchExportError(
+torch.onnx._internal.exporter._errors.TorchExportError: Failed to export the model with torch.export. [96mThis is step 1/3[0m of exporting the model to ONNX. Next steps:
+- Modify the model code for `torch.export.export` to succeed. Refer to https://pytorch.org/docs/stable/generated/exportdb/index.html for more information.
+- Debug `torch.export.export` and submit a PR to PyTorch.
+- Create an issue in the PyTorch GitHub repository against the [96m*torch.export*[0m component and attach the full error stack as well as reproduction scripts.
+
+## Exception summary
+
+<class 'RuntimeError'>: Unhandled FakeTensor Device Propagation for aten.sub.Tensor, found two different devices cpu, cuda:0
+
+(Refer to the full stack trace above for more information.)

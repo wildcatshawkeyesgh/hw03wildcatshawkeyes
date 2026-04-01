@@ -12,27 +12,232 @@ from sklearn.metrics import (
     accuracy_score,
     ConfusionMatrixDisplay,
 )
+import time
+
+__all__ = ["ImageCNN", "ClassTrainer", "OptimusPrime","CNNTrainer"]
 
 
-__all__ = ["SimpleNN", "ClassTrainer", "OptimusPrime"]
+class CNNTrainer:
+    def __init__(
+        self,
+        train_loader,
+        test_loader,
+        eta,
+        epoch,
+        loss,
+        optimizer,
+        model,
+        device,
+        scheduler,
+        
+    ):
+
+        self.train_loader = train_loader
+        self.test_loader = test_loader
+        self.eta = eta
+        self.epoch = epoch
+        self.loss = loss
+        self.optimizer = optimizer
+        self.model = model
+        self.device = device
+        self.loss_vector = torch.zeros(epoch)
+        self.accuracy_vector = torch.zeros(epoch)
+        self.scheduler = scheduler
+        
+
+    def train(self):
+
+        for i in range(self.epoch):
+            epoch_loss = 0
+            correct = 0
+            total = 0
+            start_time = time.time()
+            for batch in self.train_loader:
+           
+                images = batch['pixel_values'].to(self.device)
+                labels = batch['labels'].to(self.device)
+                
+                self.optimizer.zero_grad()
+                predictions = self.model(images)
+                loss = self.loss(predictions, labels)
+                loss.backward()
+                self.optimizer.step()
+
+                epoch_loss += loss.item()
+                predicted_classes = torch.argmax(predictions, dim=1)
+                correct += (predicted_classes == labels).sum().item()
+                total += labels.size(0)
+
+            self.loss_vector[i] = epoch_loss / len(self.train_loader)
+            self.accuracy_vector[i] = correct / total
+            self.scheduler.step()
+
+            epoch_time = time.time() - start_time
+            print(
+            f"Epoch {i}, Loss: {self.loss_vector[i]:.4f}, Accuracy: {self.accuracy_vector[i]:.4f}, Time: {epoch_time:.2f}s"
+            )
 
 
-class SimpleNN(nn.Module):
-    def __init__(self, in_features, m):  # m is the number of classifications
-        super(SimpleNN, self).__init__()
-        self.in_features = in_features
-        self.fc1 = nn.Linear(self.in_features, 64)
-        self.fc2 = nn.Linear(64, 128)
-        self.fc3 = nn.Linear(128, 16)
-        self.fc4 = nn.Linear(16, m)  # check m vs m-1
+
+    def test(self):
+        test_loss = 0
+        with torch.no_grad():
+            for batch_features, batch_labels in self.test_loader:
+                batch_features = batch_features.to(self.device)
+                batch_labels = batch_labels.to(self.device)
+                test_outputs = self.model(batch_features)
+                test_loss += self.loss(test_outputs, batch_labels).item()
+        return test_loss / len(self.test_loader)
+
+    def predict(self, X):
+        self.model.eval()
+        with torch.no_grad():
+            X = X.to(self.device)
+            y_pred = self.model(X)
+            predicted_classes = torch.argmax(y_pred, dim=1)
+            return predicted_classes
+
+    def save(self, file_name=None):
+        if file_name is None:
+            file_name = "model.onnx"
+        self.model.eval()
+        dummy_input = torch.zeros(1, 3, 224, 224).to(self.device)
+        torch.onnx.export(self.model, dummy_input, file_name)
+
+    def evaluation(self):
+
+        train_preds = []
+        train_labels = []
+        with torch.no_grad():
+            for features, labels in self.train_loader:
+                features = features.to(self.device)
+                labels = labels.to(self.device)
+                preds = (self.model(features).squeeze()>0.0).long()
+                train_preds.append(preds)
+                train_labels.append(labels)
+        train_preds = torch.cat(train_preds).cpu()
+        train_labels = torch.cat(train_labels).cpu()
+
+        test_preds = []
+        test_labels = []
+        with torch.no_grad():
+            for features, labels in self.test_loader:
+                features = features.to(self.device)
+                labels = labels.to(self.device)
+                preds = (self.model(features).squeeze()>0.0).long()
+                test_preds.append(preds)
+                test_labels.append(labels)
+        test_preds = torch.cat(test_preds).cpu()
+        test_labels = torch.cat(test_labels).cpu()
+
+        plt.figure()
+        plt.plot(self.loss_vector.numpy())
+        plt.title("Loss over epochs")
+        plt.xlabel("Epoch")
+        plt.ylabel("Loss")
+        plt.savefig("loss_curve.png")
+        plt.show()
+
+        # Plot accuracy
+        plt.figure()
+        plt.plot(self.accuracy_vector.numpy())
+        plt.title("Accuracy over epochs")
+        plt.xlabel("Epoch")
+        plt.ylabel("Accuracy")
+        plt.savefig("accuracy_curve.png")
+        plt.show()
+
+        # Confusion matrix
+        plt.figure()
+        cm = confusion_matrix(test_labels.numpy(), test_preds.numpy())
+        disp = ConfusionMatrixDisplay(cm)
+        disp.plot()
+        plt.savefig("confusion_matrix.png")
+        plt.show()
+
+        # Training metrics
+        train_accuracy = accuracy_score(train_labels.numpy(), train_preds.numpy())
+        train_precision = precision_score(
+            train_labels.numpy(), train_preds.numpy(), average="weighted"
+        )
+        train_recall = recall_score(
+            train_labels.numpy(), train_preds.numpy(), average="weighted"
+        )
+        train_f1 = f1_score(
+            train_labels.numpy(), train_preds.numpy(), average="weighted"
+        )
+
+        # Test metrics
+        test_accuracy = accuracy_score(test_labels.numpy(), test_preds.numpy())
+        test_precision = precision_score(
+            test_labels.numpy(), test_preds.numpy(), average="weighted"
+        )
+        test_recall = recall_score(
+            test_labels.numpy(), test_preds.numpy(), average="weighted"
+        )
+        test_f1 = f1_score(test_labels.numpy(), test_preds.numpy(), average="weighted")
+
+        return (
+            train_accuracy,
+            train_precision,
+            train_recall,
+            train_f1,
+            test_accuracy,
+            test_precision,
+            test_recall,
+            test_f1,
+        )
+
+class ConvLayer(nn.Module):
+    def __init__(self, input_dim, output_dim):
+        super().__init__()
+        self.conv = nn.Conv2d(in_channels = input_dim, out_channels = output_dim, kernel_size = 3, stride=1, padding=1)
+        self.batch = nn.BatchNorm2d(num_features = output_dim)
         self.relu = nn.ReLU()
+        self.pool = nn.MaxPool2d(kernel_size = 2, stride = 2)
 
     def forward(self, x):
-        x = self.relu(self.fc1(x))
-        x = self.relu(self.fc2(x))
-        x = self.relu(self.fc3(x))
-        x = self.fc4(x)
+        
+        x = self.conv(x)
+        x = self.batch(x)
+        x = self.relu(x)
+        x = self.pool(x)
         return x
+
+
+
+class ImageCNN(nn.Module):
+    def __init__(self, num_classes): 
+        super().__init__()
+        self.num_classes = num_classes
+
+        self.block1 = ConvLayer(3, 64)
+        self.block2 = ConvLayer(64, 128)
+        self.block3 = ConvLayer(128, 256)
+        self.block4 = ConvLayer( 256, 512)
+        self.block5 = ConvLayer(512, 512)
+        self.flatten = nn.AdaptiveAvgPool2d((1,1))
+        self.fc1 = nn.Sequential(nn.Linear(512, 1024),
+                        nn.ReLU(), nn.Dropout(0.2))
+
+        self.fc2 = nn.Linear(1024, self.num_classes)
+        
+        
+
+    def forward(self, x):
+        x = self.block1(x)
+        x = self.block2(x)
+        x = self.block3(x)
+        x = self.block4(x)
+        x = self.block5(x)
+        x = self.flatten(x)
+        x = x.view(x.size(0), -1)
+        x = self.fc1(x)
+        x = self.fc2(x)
+        
+        return x
+
+
 
 
 class OptimusPrime(nn.Module):
@@ -162,6 +367,8 @@ class ClassTrainer:
             correct = 0
             total = 0
             for batch_features, batch_labels in self.train_loader:
+                batch_features = batch_features.to(self.device)
+                batch_labels = batch_labels.to(self.device)
                 self.optimizer.zero_grad()
                 predictions = self.model.forward(batch_features)
                 if i == 0 and total == 0:
@@ -170,6 +377,7 @@ class ClassTrainer:
 
                 loss = self.loss(predictions, batch_labels.unsqueeze(1).float())
                 loss.backward()
+                nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=2)
                 self.optimizer.step()
 
                 epoch_loss += loss.item()
@@ -197,6 +405,8 @@ class ClassTrainer:
         test_loss = 0
         with torch.no_grad():
             for batch_features, batch_labels in self.test_loader:
+                batch_features = batch_features.to(self.device)
+                batch_labels = batch_labels.to(self.device)
                 test_outputs = self.model(batch_features)
                 test_loss += self.loss(test_outputs, batch_labels).item()
         return test_loss / len(self.test_loader)
@@ -219,21 +429,25 @@ class ClassTrainer:
         train_labels = []
         with torch.no_grad():
             for features, labels in self.train_loader:
-                preds = torch.argmax(self.model(features), dim=1)
+                features = features.to(self.device)
+                labels = labels.to(self.device)
+                preds = (self.model(features).squeeze()>0.0).long()
                 train_preds.append(preds)
                 train_labels.append(labels)
-        train_preds = torch.cat(train_preds)
-        train_labels = torch.cat(train_labels)
+        train_preds = torch.cat(train_preds).cpu()
+        train_labels = torch.cat(train_labels).cpu()
 
         test_preds = []
         test_labels = []
         with torch.no_grad():
             for features, labels in self.test_loader:
-                preds = torch.argmax(self.model(features), dim=1)
+                features = features.to(self.device)
+                labels = labels.to(self.device)
+                preds = (self.model(features).squeeze()>0.0).long()
                 test_preds.append(preds)
                 test_labels.append(labels)
-        test_preds = torch.cat(test_preds)
-        test_labels = torch.cat(test_labels)
+        test_preds = torch.cat(test_preds).cpu()
+        test_labels = torch.cat(test_labels).cpu()
 
         plt.figure()
         plt.plot(self.loss_vector.numpy())

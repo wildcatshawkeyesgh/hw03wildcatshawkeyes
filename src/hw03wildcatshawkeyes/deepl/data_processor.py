@@ -12,12 +12,12 @@ class DataProcessor:
     wheel_speed_file = "_CAN_Messages_decoded_wheel_speed_fl.csv"
     status_file = "_CAN_Messages_decoded_acc_status.csv"
     kmh_ms_conversion = 1 / 3.6
-    num_lags = 9
+    
 
-    def __init__(self, input_folder, output_folder):
+    def __init__(self, input_folder, output_folder, num_lags = 9):
         self.input_folder = Path(input_folder)
         self.output_folder = Path(output_folder)
-
+        self.num_lags = num_lags
     def find_matching_files(self):
         speed_files = list(self.input_folder.glob(f"*{self.wheel_speed_file}"))
         pairs = []
@@ -104,14 +104,14 @@ class DataProcessor:
 
 class DataPrep:
 
-    def __init__(self, data_path, batch_size):
+    def __init__(self, data_path, batch_size, num_lags = 9):
         self.data_path = Path(data_path)
         self.batch_size = batch_size
-
+        self.num_lags = num_lags
     def get_features_results(self):
         self.df = pl.read_csv(self.data_path)
 
-        feature_cols = ["speed"] + [f"speed_{i}" for i in range(1, 10)]
+        feature_cols = ["speed"] + [f"speed_{i}" for i in range(1, self.num_lags + 1)]
         features = self.df.select(feature_cols)
         results = self.df.select(["status"])
 
@@ -155,9 +155,9 @@ def get_best_gpu(strategy="utilization"):
     if strategy == "memory":
         free_mem = []
         for i in range(torch.cuda.device_count()):
-            props = torch.cuda.mem_get_info(1)  # (free, total)
-            free_mem.append(props[o])
-            return free_mem.index(max(free_mem))
+            props = torch.cuda.mem_get_info(i)
+            free_mem.append(props[0])
+        return free_mem.index(max(free_mem))
 
     elif strategy == "utilization":
         result = subprocess.run(
