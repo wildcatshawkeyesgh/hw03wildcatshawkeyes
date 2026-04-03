@@ -46,7 +46,8 @@ class CNNTrainer:
         
 
     def train(self):
-
+        self.val_loss_vector = torch.zeros(self.epoch)
+        self.val_accuracy_vector = torch.zeros(self.epoch)
         for i in range(self.epoch):
             epoch_loss = 0
             correct = 0
@@ -71,12 +72,31 @@ class CNNTrainer:
             self.loss_vector[i] = epoch_loss / len(self.train_loader)
             self.accuracy_vector[i] = correct / total
             self.scheduler.step()
+            # Validation pass
+            self.model.eval()
+            val_loss = 0
+            val_correct = 0
+            val_total = 0
+            with torch.no_grad():
+                for batch in self.test_loader:
+                    images = batch['pixel_values'].to(self.device)
+                    labels = batch['labels'].to(self.device)
+                    predictions = self.model(images)
+                    v_loss = self.loss(predictions, labels)
+                    val_loss += v_loss.item()
+                    predicted_classes = torch.argmax(predictions, dim=1)
+                    val_correct += (predicted_classes == labels).sum().item()
+                    val_total += labels.size(0)
 
+            self.val_loss_vector[i] = val_loss / len(self.test_loader)
+            self.val_accuracy_vector[i] = val_correct / val_total
+            self.model.train()
             epoch_time = time.time() - start_time
             print(
-            f"Epoch {i}, Loss: {self.loss_vector[i]:.4f}, Accuracy: {self.accuracy_vector[i]:.4f}, Time: {epoch_time:.2f}s"
+            f"Epoch {i}, Loss: {self.loss_vector[i]:.4f}, Acc: {self.accuracy_vector[i]:.4f}, "
+            f"Val Loss: {self.val_loss_vector[i]:.4f}, Val Acc: {self.val_accuracy_vector[i]:.4f}, Time: {epoch_time:.2f}s"
             )
-
+            
 
 
     def test(self):
@@ -361,7 +381,8 @@ class ClassTrainer:
         self.wait = 0
 
     def train(self):
-
+        self.val_loss_vector = torch.zeros(self.epoch)
+        self.val_accuracy_vector = torch.zeros(self.epoch)
         for i in range(self.epoch):
             epoch_loss = 0
             correct = 0
@@ -388,7 +409,25 @@ class ClassTrainer:
             self.loss_vector[i] = epoch_loss / len(self.train_loader)
             self.accuracy_vector[i] = correct / total
             self.scheduler.step()
+            # Validation pass
+            self.model.eval()
+            val_loss = 0
+            val_correct = 0
+            val_total = 0
+            with torch.no_grad():
+                for batch_features, batch_labels in self.test_loader:
+                    batch_features = batch_features.to(self.device)
+                    batch_labels = batch_labels.to(self.device)
+                    predictions = self.model(batch_features)
+                    v_loss = self.loss(predictions, batch_labels.unsqueeze(1).float())
+                    val_loss += v_loss.item()
+                    predicted_classes = (predictions.squeeze() > 0.0).long()
+                    val_correct += (predicted_classes == batch_labels).sum().item()
+                    val_total += batch_labels.size(0)
 
+            self.val_loss_vector[i] = val_loss / len(self.test_loader)
+            self.val_accuracy_vector[i] = val_correct / val_total
+            self.model.train()
             if i == 0 or self.loss_vector[i] < self.best_loss:
                 self.best_loss = self.loss_vector[i]
                 self.wait = 0
@@ -398,7 +437,8 @@ class ClassTrainer:
                     print(f"Early stopping at epoch {i}")
                     break
             print(
-                f"Epoch {i}, Loss: {self.loss_vector[i]:.4f}, Accuracy: {self.accuracy_vector[i]:.4f}"
+                f"Epoch {i}, Train Loss: {self.loss_vector[i]:.4f}, Train Acc: {self.accuracy_vector[i]:.4f}, "
+                f"Val Loss: {self.val_loss_vector[i]:.4f}, Val Acc: {self.val_accuracy_vector[i]:.4f}"
             )
 
     def test(self):
