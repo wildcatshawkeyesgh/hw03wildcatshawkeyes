@@ -419,9 +419,27 @@ class ClassTrainer:
 
     def save(self, file_name=None):
         if file_name is None:
-            file_name = "model.onnx"
-        dummy_input = torch.zeros(1, self.model.in_features)
-        torch.onnx.export(self.model, dummy_input, file_name)
+            file_name = "model_ACC.onnx"
+        
+        
+        self.model.eval()
+        
+        dummy_input = torch.zeros(1, 10).to(self.device)
+        
+        torch.onnx.export(
+            self.model,
+            dummy_input,
+            file_name,
+            export_params=True,
+            opset_version=18,
+            do_constant_folding=True,
+            input_names=['input'],
+            output_names=['output'],
+            dynamic_axes={
+                'input': {0: 'batch_size'},
+                'output': {0: 'batch_size'}
+            }
+        )
 
     def evaluation(self):
 

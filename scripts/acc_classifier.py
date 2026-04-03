@@ -59,6 +59,7 @@ trainer = deepl.ClassTrainer(
     patience=patience,
 )
 trainer.train()
+trainer.save("acc_model.onnx")
 trainer.test()
 
 train_acc, train_prec, train_rec, train_f1, test_acc, test_prec, test_rec, test_f1 = (
