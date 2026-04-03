@@ -5121,3 +5121,6 @@ Epoch 5113, Loss: 0.2075, Accuracy: 0.9537, Time: 31.85s
 Epoch 5114, Loss: 0.2187, Accuracy: 0.9542, Time: 31.88s
 Epoch 5115, Loss: 0.2094, Accuracy: 0.9532, Time: 31.75s
 Epoch 5116, Loss: 0.2119, Accuracy: 0.9542, Time: 31.69s
+Epoch 5117, Loss: 0.2100, Accuracy: 0.9538, Time: 31.73s
+Epoch 5118, Loss: 0.2083, Accuracy: 0.9531, Time: 31.82s
+Epoch 5119, Loss: 0.2224, Accuracy: 0.9513, Time: 31.67s
