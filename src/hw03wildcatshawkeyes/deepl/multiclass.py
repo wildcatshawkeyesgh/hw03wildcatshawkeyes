@@ -125,14 +125,13 @@ class CNNTrainer:
         torch.onnx.export(self.model, dummy_input, file_name)
 
     def evaluation(self):
-
         train_preds = []
         train_labels = []
         with torch.no_grad():
-            for features, labels in self.train_loader:
-                features = features.to(self.device)
-                labels = labels.to(self.device)
-                preds = (self.model(features).squeeze()>0.0).long()
+            for batch in self.train_loader:
+                features = batch['pixel_values'].to(self.device)  # Changed
+                labels = batch['labels'].to(self.device)          # Changed
+                preds = torch.argmax(self.model(features), dim=1) # Also fixed prediction logic
                 train_preds.append(preds)
                 train_labels.append(labels)
         train_preds = torch.cat(train_preds).cpu()
@@ -141,10 +140,10 @@ class CNNTrainer:
         test_preds = []
         test_labels = []
         with torch.no_grad():
-            for features, labels in self.test_loader:
-                features = features.to(self.device)
-                labels = labels.to(self.device)
-                preds = (self.model(features).squeeze()>0.0).long()
+            for batch in self.test_loader:
+                features = batch['pixel_values'].to(self.device)  
+                labels = batch['labels'].to(self.device)          
+                preds = torch.argmax(self.model(features), dim=1) 
                 test_preds.append(preds)
                 test_labels.append(labels)
         test_preds = torch.cat(test_preds).cpu()

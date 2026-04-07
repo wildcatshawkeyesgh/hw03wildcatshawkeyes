@@ -48,7 +48,7 @@ for opt, val in opts:
     elif opt == "--test_ratio":
         test_ratio = float(val)
 
-#loads data
+
 dataset = load_from_disk(file_path)
 
 train_dataset = dataset['train']
@@ -61,14 +61,14 @@ print(f"Number of classes: {num_classes}")
 
 train_size = int(len(train_dataset) * train_ratio)
 val_size = int(len(val_dataset) * val_ratio)
-#test_size = int(len(test_dataset) * test_ratio)
+
 
 train_dataset = train_dataset.select(range(train_size))
 val_dataset = val_dataset.select(range(val_size))
-#test_dataset = test_dataset.select(range(test_size))
 
 
-#save ex images
+
+
 script_dir = os.path.dirname(os.path.abspath(__file__))
 train_example = train_dataset[0]
 train_image = train_example['image']
@@ -192,7 +192,7 @@ df_metrics = pl.DataFrame(
     {
         "timestamp": [timestamp],
         "eta": [eta],
-        "epoch": [epoch],
+        "epoch": [epochs],
         "train_accuracy": [train_acc],
         "train_precision": [train_prec],
         "train_recall": [train_rec],
